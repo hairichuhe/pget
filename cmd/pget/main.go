@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Code-Hex/pget"
+	"pget"
 )
 
 func main() {
 
+	//新建pget对象
 	cli := pget.New()
 	if err := cli.Run(); err != nil {
 		if cli.Trace {
@@ -19,5 +20,6 @@ func main() {
 		os.Exit(1)
 	}
 
+	//程序正确退出，想看fmt的时候，不用exit
 	os.Exit(0)
 }

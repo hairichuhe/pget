@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/asaskevich/govalidator"
+	"github.com/asaskevich/govalidator" //验证器，验证strings等类型
 	"github.com/pkg/errors"
 )
 
@@ -18,10 +18,10 @@ const (
 
 // Pget structs
 type Pget struct {
-	Trace bool
-	Utils
-	TargetDir  string
-	Procs      int
+	Trace      bool   //显示详细错误信息
+	Utils             //文件相关数据，是 一个接口，只要相应对象实现它所拥有的方法即可
+	TargetDir  string //目标路径
+	Procs      int    //启用cpu数目
 	URLs       []string
 	TargetURLs []string
 	args       []string
@@ -43,12 +43,12 @@ func New() *Pget {
 	return &Pget{
 		Trace:   false,
 		Utils:   &Data{},
-		Procs:   runtime.NumCPU(), // default
+		Procs:   runtime.NumCPU(), // default 8核16线程，指的是线程数
 		timeout: 10,
 	}
 }
 
-// ErrTop get important message from wrapped error message
+// ErrTop get important message from wrapped error message 从包裹的重要信息中获取重要消息
 func (pget Pget) ErrTop(err error) error {
 	for e := err; e != nil; {
 		switch e.(type) {
@@ -85,13 +85,14 @@ func (pget *Pget) Run() error {
 	return nil
 }
 
-// Ready method define the variables required to Download.
+// Ready method define the variables required to Download.定义下载所需要的变量
 func (pget *Pget) Ready() error {
+	//设置可执行的最大cpu数
 	if procs := os.Getenv("GOMAXPROCS"); procs == "" {
 		runtime.GOMAXPROCS(pget.Procs)
 	}
 
-	var opts Options
+	var opts Options //命令行参数
 	if err := pget.parseOptions(&opts, os.Args[1:]); err != nil {
 		return errors.Wrap(err, "failed to parse command line args")
 	}
@@ -163,10 +164,11 @@ func (i ignore) Cause() error {
 func (pget *Pget) parseOptions(opts *Options, argv []string) error {
 
 	if len(argv) == 0 {
-		os.Stdout.Write(opts.usage())
+		os.Stdout.Write(opts.usage()) //写入使用信息
 		return pget.makeIgnoreErr()
 	}
 
+	//进行参数解析
 	o, err := opts.parse(argv)
 	if err != nil {
 		return errors.Wrap(err, "failed to parse command line options")

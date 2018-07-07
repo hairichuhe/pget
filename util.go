@@ -15,7 +15,7 @@ import (
 	"gopkg.in/cheggaaa/pb.v1"
 )
 
-// Data struct has file of relational data
+// Data struct has file of relational data  文件相关数据
 type Data struct {
 	filename     string
 	filesize     uint
