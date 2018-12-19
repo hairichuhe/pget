@@ -140,7 +140,7 @@ func (d Data) freeSpace() (freespace uint) {
 	return
 }
 
-// IsFree is check your disk space for size needed to download
+// IsFree is check your disk space for size needed to download  检查下载空间是否足够
 func (d Data) IsFree(split uint) error {
 	want := d.filesize + split
 	if d.freeSpace() < want {

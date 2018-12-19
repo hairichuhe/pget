@@ -109,6 +109,7 @@ func (pget *Pget) Ready() error {
 		pget.timeout = opts.Timeout
 	}
 
+	//解析下载内容
 	if err := pget.parseURLs(); err != nil {
 		return errors.Wrap(err, "failed to parse of url")
 	}
